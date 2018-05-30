@@ -6,7 +6,4 @@
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
 !_TAG_PROGRAM_VERSION	0.0.0	/4dbeb0be/
 app	server.py	/^app = FlaskAPI(__name__)$/;"	v
-note_repr	server.py	/^def note_repr(key):$/;"	f
-notes	server.py	/^notes = {$/;"	v
-notes_detail	server.py	/^def notes_detail(key):$/;"	f
-notes_list	server.py	/^def notes_list():$/;"	f
+root	server.py	/^def root():$/;"	f
