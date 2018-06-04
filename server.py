@@ -1,15 +1,58 @@
-from flask import request, url_for, render_template, abort
-from flask_api import FlaskAPI, status, exceptions
+from flask import request, render_template, abort
+from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 
-import json
-import subprocess
-import os
 import predictor
 
 app = FlaskAPI(__name__)
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql://root:koekje@localhost/huisartsen'
+db = SQLAlchemy(app)
+
+# Database
+
+diagnose_symptoms = db.Table('diagnose_symptoms',
+                             db.Column('diagnose_id', db.Integer, db.ForeignKey(
+                                 'diagnose.id'), primary_key=True),
+                             db.Column('symptom_id', db.Integer, db.ForeignKey(
+                                 'symptom.id'), primary_key=True)
+                             )
 
 
+class Diagnose(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    gender = db.Column(db.Boolean, nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+
+    symptoms = db.relationship('Symptom', secondary=diagnose_symptoms, lazy='subquery',
+                               backref=db.backref('diagnoses', lazy=True))
+
+    disease_id = db.Column(db.Integer, db.ForeignKey('disease.id'),
+                           nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
+class Disease(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
+class Symptom(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+db.create_all()
+
+
+# Flask
 @app.route('/')
 def root():
     return render_template('index.html', available_symptoms=predictor.available_symptoms)
