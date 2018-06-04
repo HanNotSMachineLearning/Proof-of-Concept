@@ -4,7 +4,7 @@ import sys
 import csv
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 # read csv files
 available_symptoms = []
@@ -27,7 +27,7 @@ for item in train_data:
     features.append(item[:-1].copy())
 
 # create a decision tree classifier
-clf = MLPClassifier(hidden_layer_sizes=(10, 10, 10), max_iter=100000)
+clf = RandomForestClassifier(n_estimators=50, random_state=0)
 # train the classifier with the trainingsdata
 clf = clf.fit(features, labels)
 
