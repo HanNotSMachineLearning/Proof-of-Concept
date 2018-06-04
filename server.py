@@ -1,15 +1,23 @@
 from flask import request, url_for, render_template, abort
 from flask_api import FlaskAPI, status, exceptions
+from flask_sqlalchemy import SQLAlchemy
+
 import json
+import subprocess
+import os
+import predictor
 
 app = FlaskAPI(__name__)
-
-available_symptoms = ('test', 'skrt')
 
 
 @app.route('/')
 def root():
-    return render_template('index.html', available_symptoms=available_symptoms)
+    return render_template('index.html', available_symptoms=predictor.available_symptoms)
+
+
+@app.route('/api/available_symptoms')
+def available_symptoms():
+    return predictor.available_symptoms
 
 
 @app.route('/foo', methods=['POST'])
@@ -17,8 +25,10 @@ def foo():
     if not request.form:
         abort(400)
 
-    print(request.form.getlist('symptoms'))
-    return json.dumps(request.form)
+    result = predictor.predict(
+        request.form['gender'], request.form['age'], request.form.getlist('symptoms'))
+    return result
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    context = ('ssl/machine.crt', 'ssl/machine.key')
+    app.run(debug=True, ssl_context=context)

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Index pagina</title>
+  </head>
+  <body>
+    <form action="foo" method="POST">
+      <select name="symptoms" multiple required>
+        {% for available_symptom in available_symptoms %}
+        <option>{{ available_symptom }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Leeftijd</label>
+      <input name="age" type="number" min="1" max="122" required>
+
+      <select name="gender" required>
+        <option selected disabled>Kies uw geslacht</option>
+        <option>Vrouw</option>
+        <option>Man</option>
+      </select>
+
+
+      <input type="submit">
+    </form>
+  </body>
+</html>
