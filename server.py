@@ -15,12 +15,12 @@ def root():
     return render_template('index.html', available_symptoms=predictor.available_symptoms)
 
 
-@app.route('/api/available_symptoms')
+@app.route('/api/symptoms/all')
 def available_symptoms():
     return predictor.available_symptoms
 
 
-@app.route('/foo', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def foo():
     if not request.form:
         abort(400)

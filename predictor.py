@@ -50,13 +50,9 @@ def predict(gender, age, symptoms):
         symptoms_array.append(1 if available_symptom in symptoms else 0)
 
     predictions = clf.predict_proba([symptoms_array])[0]
-    best_prediction_value = max(predictions)
-    print("Value = " + str(best_prediction_value))
-    best_prediction_index = predictions.index(best_prediction_value)
+    value, index = max([(v, i) for i, v in enumerate(predictions)])
 
-    print(clf.predict_proba([symptoms_array]))
-
-    prediction = int(clf.predict([symptoms_array])[0])
-    print(ziektes[best_prediction_index])
-
-    return ziektes[prediction]
+    return {
+        'disease': ziektes[index],
+        'chance': value
+    }
