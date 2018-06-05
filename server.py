@@ -2,7 +2,8 @@ from flask import request, render_template, abort
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 
-import predictor
+from Predictor import Predictor
+
 
 app = FlaskAPI(__name__)
 app.config[
@@ -35,7 +36,7 @@ class Diagnose(db.Model):
                            nullable=False)
 
     def __repr__(self):
-        return '<Diagnose %r>' % self.name
+        return '<Diagnose %r>' % self.id
 
 
 class Symptom(db.Model):
@@ -48,10 +49,20 @@ class Symptom(db.Model):
 db.create_all()
 
 
-predictor.ziektes = list(map(lambda x: x.name, Disease.query.all()))
-predictor.available_symptoms = list(map(lambda x: x.name, Symptom.query.all()))
+available_symptoms = list(map(lambda x: x.name, Symptom.query.all()))
+diseases = list(map(lambda x: x.name, Disease.query.all()))
+diagnoses = Diagnose.query.all()
+features = []
+for diagnose in diagnoses:
+    symptoms = [0] * len(available_symptoms)
+    for symptom in diagnose.symptoms:
+        symptoms[symptom.id - 1] = 1
+    feature = [int(diagnose.gender), diagnose.age] + symptoms
+    features.append(feature)
 
-print(predictor.available_symptoms)
+labels = list(map(lambda v: int(v.disease_id) - 1, diagnoses))
+
+predictor = Predictor(available_symptoms, diseases, features, labels)
 # Flask
 
 
