@@ -18,7 +18,8 @@ with open('Data/Dataset-100.csv', 'r') as DataFile:
 features = []
 labels = []
 
-ziektes = ['Astma', 'Bronchitis', 'Griep', 'Longontsteking', 'Verkoudheid']
+ziektes = None
+available_symptoms = None
 
 # split labels from features
 for item in train_data:

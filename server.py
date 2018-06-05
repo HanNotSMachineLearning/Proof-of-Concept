@@ -20,7 +20,7 @@ class Disease(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Disease %r>' % self.name
 
 
 class Diagnose(db.Model):
@@ -35,7 +35,7 @@ class Diagnose(db.Model):
                            nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Diagnose %r>' % self.name
 
 
 class Symptom(db.Model):
@@ -43,58 +43,18 @@ class Symptom(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Symptom %r>' % self.name
 
 db.create_all()
 
 
-import csv
-# Add diseases
-astma = Disease(id=1, name='Astma')
-bronchitis = Disease(id=2, name='Bronchitis')
-griep = Disease(id=3, name='Griep')
-longontsteking = Disease(id=4, name='Longontsteking')
-verkoudheid = Disease(id=5, name='Verkoudheid')
+predictor.ziektes = list(map(lambda x: x.name, Disease.query.all()))
+predictor.available_symptoms = list(map(lambda x: x.name, Symptom.query.all()))
 
-db.session.merge(astma)
-db.session.merge(bronchitis)
-db.session.merge(griep)
-db.session.merge(longontsteking)
-db.session.merge(verkoudheid)
-
-db.session.commit()
-
-
-with open('Data/Dataset-100.csv', newline='') as csvfile:
-
-    # db.session.execute('''TRUNCATE TABLE diagnose''')
-    # db.session.commit()
-
-    rows = list(csv.reader(csvfile))
-    print(rows[0][1:5])
-    for i, header in enumerate(rows[0][2:-1]):
-        print("Header rij")
-        print(header)
-
-        symptom = Symptom(id=i + 1, name=header)
-        db.session.merge(symptom)
-
-    db.session.commit()
-
-    for i, row in enumerate(rows[1:]):
-        print("Rij")
-        me = Diagnose(id=i + 1, gender=bool(
-            int(row[0])), age=row[1], disease_id=str(int(row[-1]) + 1))
-        for symptom_id, symptom in enumerate(row[2:-1]):
-            if symptom == '1':
-                me.symptoms.append(Symptom.query.get(symptom_id + 1))
-
-        db.session.merge(me)
-
-    db.session.commit()
-
-
+print(predictor.available_symptoms)
 # Flask
+
+
 @app.route('/')
 def root():
     return render_template('index.html', available_symptoms=predictor.available_symptoms)
