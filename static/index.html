@@ -6,22 +6,22 @@
 	<title>Diagnostisator</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
 	 crossorigin="anonymous">
-	 <style>
-		 .symptom-container{
+	<style>
+		.symptom-container {
 			display: flex;
 			justify-content: space-around;
 			flex-wrap: wrap;
-		 }
+		}
 
-		 .symptom-checkbox{
-			 display: none;
-		 }
+		.symptom-checkbox {
+			display: none;
+		}
 
-		 .symptom-holder{
+		.symptom-holder {
 			padding: 10px 20px;
 			margin: 20px;
-		 }
-	 </style>
+		}
+	</style>
 </head>
 
 <body>
@@ -66,7 +66,7 @@
 					</div>
 					<div>
 						<input type="checkbox" class="symptom-checkbox" name="symptom" value="x" id="x_value2">
-						<label for="x_value2" class="btn btn-danger symptom-holder">Test label</label>						
+						<label for="x_value2" class="btn btn-danger symptom-holder">Test label</label>
 					</div>
 					<div>
 						<input type="checkbox" class="symptom-checkbox" name="symptom" value="x" id="x_value3">
@@ -88,20 +88,20 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
 	 crossorigin="anonymous"></script>
 
-	 <script>
-		 $(".symptom-holder").click(function (e) {
+	<script>
+		$(".symptom-holder").click(function (e) {
 			e.preventDefault();
 			var x = document.getElementById($(this).attr('for'));
-			x.checked =! x.checked;
-			if(x.checked){
+			x.checked = !x.checked;
+			if (x.checked) {
 				$(this).addClass("btn-success");
 				$(this).removeClass("btn-danger");
-			}else{
+			} else {
 				$(this).addClass("btn-danger");
 				$(this).removeClass("btn-success");
 			}
-		 });
-	 </script>
+		});
+	</script>
 </body>
 
 </html>

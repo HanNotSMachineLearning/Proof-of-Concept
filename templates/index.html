@@ -1,28 +1,116 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Index pagina</title>
-  </head>
-  <body>
-    <form action="foo" method="POST">
-      <select name="symptoms" multiple required>
-        {% for available_symptom in available_symptoms %}
-        <option>{{ available_symptom }}</option>
-        {% endfor %}
-      </select>
 
-      <label>Leeftijd</label>
-      <input name="age" type="number" min="1" max="122" required>
+<head>
+	<meta charset="UTF-8">
+	<title>Home - Diagnostisator</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+	<style>
+		.symptom-checkbox {
+			display: none;
+		}
 
-      <select name="gender" required>
-        <option selected disabled>Kies uw geslacht</option>
-        <option>Vrouw</option>
-        <option>Man</option>
-      </select>
+		.symptom-holder {
+			padding: 10px 20px;
+			margin: 20px;
+		}
 
+		.diseases-list {
+			display: flex;
+			justify-content: space-around;
+		}
 
-      <input type="submit">
-    </form>
-  </body>
+		.diseases-list>* {
+			padding: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/">Diagnostisator</a>
+	</nav>
+
+	<form class="container" method="POST" action="/predict">
+		<br/>
+		<h1>Stel een diagnose</h1>
+		<p>De volgende ziektes kunnen voorspelt worden: <div id="predictable-diseases" class="diseases-list"></div></p>
+		<br/>
+		<section class="row">
+			<div class="col-sm-12 col-md-6">
+				<h3>Leeftijd</h3>
+				<div class="input-group mb-3">
+					<input type="number" class="form-control" id="age" name="age" min="0" max="150" required/>
+					<div class="input-group-append">
+						<span class="input-group-text">jaar oud</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12 col-md-6">
+				<div class="form-group">
+					<h3>Geslacht</h3>
+					<select class="form-control" id="gender" name="gender" required>
+						<option value="1">Man</option>
+						<option value="0">Vrouw</option>
+					</select>
+				</div>
+			</div>
+		</section>
+		<br/>
+		<br/>
+		<br/>
+		<section class="row">
+			<div class="col-lg-12">
+				<h3>Symptomen</h3>
+				<section id="s-box" class="row"></section>
+			</div>
+		</section>
+		<br/>
+		<br/>
+		<button type="submit" class="btn btn-primary" style="float: right;">Voorspel een diagnose</button>
+	</form>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	 crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+	 crossorigin="anonymous"></script>
+
+	<script>
+		$(document).ready(function () {
+			fetch('https://127.0.0.1:5000/api/symptoms')
+				.then(function (response) {
+					return response.json();
+				}).then(function (symptoms) {
+					symptoms.forEach(s => {
+						$("#s-box").append('<div class="col-sm-6 col-md-4 col-lg-3 center-block text-center"><input type="checkbox" class="symptom-checkbox" name="symptoms" value="' + s + '" id="x_' + s + '"><label for="x_' + s + '" class="btn btn-danger symptom-holder">' + s + '</label></div>');
+					});
+
+					$(".symptom-holder").click(function (e) {
+						e.preventDefault();
+						var x = document.getElementById($(this).attr('for'));
+						x.checked = !x.checked;
+						if (x.checked) {
+							$(this).addClass("btn-success");
+							$(this).removeClass("btn-danger");
+						} else {
+							$(this).addClass("btn-danger");
+							$(this).removeClass("btn-success");
+						}
+					});
+				});
+
+			fetch('https://127.0.0.1:5000/api/diseases').then(function (response) {
+				return response.json();
+			}).then(function (diseases) {
+				diseases.forEach(d => {
+					$("#predictable-diseases").append('<div><b>'+d+'</b></div>')
+				});
+			});
+		});
+	</script>
+</body>
+
 </html>
