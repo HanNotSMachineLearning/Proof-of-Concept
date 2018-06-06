@@ -2,16 +2,14 @@ from flask import request, render_template, abort
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 
-from Predictor import Predictor
+from predictor import Predictor
 
 
 app = FlaskAPI(__name__)
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql://root:koekje@localhost/huisartsen'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://poc:Test123!@localhost/huisartsen'
 db = SQLAlchemy(app)
 
 # Database
-
 diagnose_symptoms = db.Table('diagnose_symptoms', db.Column('diagnose_id', db.Integer, db.ForeignKey(
     'diagnose.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False), db.Column('symptom_id', db.Integer, db.ForeignKey('symptom.id',  ondelete='CASCADE', onupdate='CASCADE'), nullable=False))
 
