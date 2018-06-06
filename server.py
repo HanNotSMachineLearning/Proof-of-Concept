@@ -72,7 +72,7 @@ def root():
 
 
 @app.route('/api/symptoms/all')
-def available_symptoms():
+def available_symptoms_route():
     return predictor.available_symptoms
 
 
