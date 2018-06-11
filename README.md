@@ -2,7 +2,7 @@
 
 ## Functionaliteit
 
-Dit proof-of-concept dient als prototype voor een toekomstige applicatie om huisartsen te assisteren met het maken van correcte diagnosen voor haar patiënten en specialisten. Dit proof-of-concept heeft nog niet alle criteria die beschreven zijn in het onderzoeksrapport in deelvraag 2.
+Dit proof-of-concept dient als prototype voor een toekomstige applicatie om huisartsen te assisteren bij het maken van correcte diagnoses voor zijn of haar patiënten en specialisten. Dit proof-of-concept voldoet nog niet alle criteria die beschreven zijn in het onderzoeksrapport in deelvraag 2, enkele hiervan zullen wel gerealiseerd worden in een toekomstige applicatie. Aan welke criteria wel en niet zijn voldaan staat hieronder beschreven.
 
 De criteria die geraakt zijn met dit proof-of-concept zijn als volgt:
 
@@ -13,7 +13,6 @@ De criteria die geraakt zijn met dit proof-of-concept zijn als volgt:
 - Het systeem moet binnen vijftien seconden met een resultaat komen.
 - De applicatie moet een web- of desktopapplicatie worden.
 - Het systeem mag geen gegevens van patiënten bewaren.
-- Het systeem accepteert alleen text-based input.
 
 De criteria waarin dit proof-of-concept **NIET** voldoet zijn als volgt:
 
@@ -40,21 +39,21 @@ De criteria waarin dit proof-of-concept **NIET** voldoet zijn als volgt:
 6. Start het proof-of-concept met het commando `python server.py`.
 7. Ga met uw browser naar https://localhost:5000.
 
-U draait nu de applicatie en u kunt predicties uitvoeren.
+De applicatie draait en het is nu mogelijk om voorspellingen uit te voeren.
 
 ## Structuur / klassen
 
 ### Algemeen
 
-In de `server` module wordt de webserver gestart die gebruik maakt van `Flask`. Met `Flask` worden drie REST-endpoints gecreëerd: eentje voor het serveren van de index-pagina (`GET /`), een voor het indienen van een verzoek om een predictie te doen (`POST /predict`) en een voor het ophalen van alle symptomen die geregistreerd staan in de database (`GET /api/symptoms/all`).
+In de `server` module wordt de webserver gestart, deze server maakt gebruik van `Flask`. Met `Flask` worden drie REST-endpoints gecreëerd: een voor het serveren van de index-pagina (`GET /`), een voor het indienen van een verzoek om een voorspelling te doen (`POST /predict`) en een voor het ophalen van alle symptomen die geregistreerd staan in de database (`GET /api/symptoms/all`).
 
-Verder heeft deze webserver toegang tot een (remote) database via `SQLAlchemy`, wat nodig is om de symptomen, ziekten en diagnosen uit te lezen uit de database. Deze data wordt doorgegeven aan het algoritme waarna er predicties uitgeoefend kunnen worden, wat in dit geval de verantwoordelijkheid is van de `Predictor`-klasse. 
+Verder heeft deze webserver toegang tot een (remote) database via `SQLAlchemy`. Dit is nodig om de symptomen, ziekten en diagnoses uit te lezen uit de database. Deze data wordt doorgegeven aan het algoritme waarna er voorspellingen gemaakt kunnen worden, wat in dit geval de verantwoordelijkheid is van de `Predictor`-klasse. 
 
 ### Predictor
 
-De berekeningen die de meest relevante ziekten retourneren worden gedaan in de `Predictor`-klasse. Je kan per instantie van de `Predictor`-klasse aangeven welke ziekten en symptomen er zijn, en zo kan je meerdere modellen creëren voor verschillende datasets.
+De functionaliteit die ervoor zorgt dat de meest relevante ziekten worden geretourneerd staat in de `Predictor`-klasse. Je kan per instantie van de `Predictor`-klasse aangeven welke ziekten en symptomen er zijn, en zo kan je meerdere modellen creëren voor verschillende datasets.
 
-Er zijn twee functies in deze klasse:
+Er zijn twee functies in deze klasse, _init_ en predict:
 
 ```python
 def __init__(self, available_symptoms, diseases, features, labels):
