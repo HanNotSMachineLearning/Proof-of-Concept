@@ -70,15 +70,15 @@ def root():
 
 
 @app.route('/api/symptoms')
-def available_symptoms():
+def availableSymptoms():
     return predictor.available_symptoms
 
 @app.route('/api/diseases')
-def available_duseases():
+def availableDuseases():
     return predictor.ziektes
 
 @app.route('/predict', methods=['POST'])
-def foo():
+def predict():
     if not request.form:
         abort(400)
     result = predictor.predict(
@@ -86,8 +86,17 @@ def foo():
     gender = 'man'
     if request.form['gender'] == 0:
         gender = 'vrouw'
-    return render_template('result.html',disease=result['disease'],accuracy=round(float(result['chance'])*100, 2),gender=gender,age=request.form['age'],symptoms=request.form.getlist('symptoms'))
 
+    for r in result:
+        r['chance'] = round(float(r['chance'])*100, 2)
+
+    return render_template('result.html',prediction=result,gender=gender,age=request.form['age'],symptoms=request.form.getlist('symptoms'))
+
+@app.route('/diagnosis', methods=['POST'])
+def addDiagnosis():
+    print()
+    return "done"
+    
 
 if __name__ == "__main__":
     context = ('ssl/machine.crt', 'ssl/machine.key')

@@ -6,6 +6,13 @@
 	<title>Prediction - Diagnostisator</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
 	 crossorigin="anonymous">
+	 <style>
+		 .thanks{
+			 text-align: center;
+			 font-size: 3rem;
+			 margin: auto;
+		 }
+	 </style>
 </head>
 
 <body>
@@ -15,20 +22,44 @@
 	</nav>
 
 	<section class="container">
-        <div class="row">
-            <div class="col-sm-12" style="text-align: center;">
-                <br/><br/><br/><br/>
-                <h4>Verwacht wordt dat het hier met {{ accuracy }}% zekerheid gaat om de volgende diagnose:</h4>
-                <h1 style="color: #BBBBBB; font-size: 8rem;">{{ disease }}</h1>
-            </div>
+		<div class="row">
+			<div class="col-sm-12" style="text-align: center;">
+				<br/>
+				<br/>
+				<h4>Verwacht wordt dat het hier gaat om de volgende diagnose:</h4>
+			</div>
+		</div>
+		<div class="row" style="text-align: center;">
+			<div class="col-sm-12 col-md-4" style="margin-top: 50px;">
+				<span style="color: #666666; font-size: 2rem; font-weight: bold;">{{ prediction[1]['disease'] }}</span>
+				<br/>
+				<span style="color: #666666; font-size: 1rem; font-weight: bold;">({{ prediction[1]['chance'] }}% kans)</span>
+			</div>
+			<div class="col-sm-12 col-md-4">
+				<span style="color: #666666; font-size: 4rem; font-weight: bold;">{{ prediction[0]['disease'] }}</span>
+				<br/>
+				<span style="color: #666666; font-size: 1rem; font-weight: bold;">({{ prediction[0]['chance'] }}% kans)</span>
+			</div>
+			<div class="col-sm-12 col-md-4" style="margin-top: 50px;">
+				<span style="color: #666666; font-size: 2rem; font-weight: bold;">{{ prediction[2]['disease'] }}</span>
+				<br/>
+				<span style="color: #666666; font-size: 1rem; font-weight: bold;">({{ prediction[2]['chance'] }}% kans)</span>
+			</div>
 		</div>
 		<div class="row">
-            <div class="col-sm-12" style="text-align: center;">
-                <br/><br/><br/><br/><br/><br/><br/><br/>
-                <h5>Deze voorspelling is gebasseerd op de volgende ingevoerde gegevens:</h5>
-            </div>
+			<div class="col-sm-12" style="text-align: center;">
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<h5>Deze voorspelling is gebasseerd op de volgende ingevoerde gegevens:</h5>
+				<br/>
+				<br/>
+			</div>
 		</div>
-		<br/><br/>
 		<div class="row">
 			<div class="col-sm-4" style="text-align: center;">
 				<h6>Leeftijd:</h6>
@@ -40,19 +71,69 @@
 			</div>
 			<div class="col-sm-4" style="text-align: center;">
 				<h6>Symptomen:</h6>
-				{% for symptom in symptoms %} 
-					<div style="font-weight: bold; color: #BBBBBB; font-size: 1.2rem;">{{ symptom }}</div> 
+				{% for symptom in symptoms %}
+				<div style="font-weight: bold; color: #BBBBBB; font-size: 1.2rem;">{{ symptom }}</div>
 				{% endfor %}
 			</div>
 		</div>
+		<div id="feedback-section" class="row" style="text-align: center; margin-top: 200px">
+			<div class="col-sm-12">
+				<p>Voor de applicatie is het van belang dat hij meer cassussen tot zijn beschikking krijgt om zo een beter voorspelling
+					te kunnen doen.
+					<br/> Zou u kunnen aangeven of de gegeven nummer 1 voorspelling correct is of niet?
+				</p>
+				<div class="row">
+					<div class="col-sm-5" style="text-align: right;">
+						<button id="prediction-correct-btn" class="btn btn-success">Deze voorspelling is correct</button>
+					</div>
+					<div class="col-sm-2"></div>
+					<div class="col-sm-5" style="text-align: left;">
+						<button id="prediction-wrong-btn" class="btn btn-danger">Deze voorspelling is niet correct</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
-	
+
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	 crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
 	 crossorigin="anonymous"></script>
+
+	<script>
+		$(document).ready(function () {
+			$('#prediction-correct-btn').click(function () {
+				fetch("/diagnosis",
+				{
+					headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+					},
+					method: "POST",
+					body: JSON.stringify({
+						"diagnosis": "{{ prediction[0]['disease'] }}",
+						"age": "{{ age }}",
+						"symptoms": {{ symptoms|tojson }}
+					})
+				})
+				Thanks();
+			});
+			$('#prediction-wrong-btn').click(function () {
+				Thanks();
+			});
+		});
+
+		function Thanks(){
+			$('#feedback-section').html('<span class="thanks">Bedankt!</span>');
+			setTimeout(RemoveThanks, 5000);
+		}
+
+		function RemoveThanks(){
+			$('#feedback-section').html('');
+		}
+	</script>
 </body>
 
 </html>
