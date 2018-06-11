@@ -2,7 +2,7 @@
 
 ## Functionaliteit
 
-Dit proof-of-concept dient als prototype voor een toekomstige applicatie om huisartsen te assisteren bij het maken van correcte diagnoses voor zijn of haar patiënten en specialisten. Dit proof-of-concept voldoet nog niet alle criteria die beschreven zijn in het onderzoeksrapport in deelvraag 2, enkele hiervan zullen wel gerealiseerd worden in een toekomstige applicatie.
+Dit proof-of-concept dient als prototype voor een toekomstige applicatie om huisartsen te assisteren bij het maken van correcte diagnoses voor zijn of haar patiënten en specialisten. Dit proof-of-concept voldoet nog niet alle criteria die beschreven zijn in het onderzoeksrapport in deelvraag 2, de criteria die niet in dit proof-of-concept zijn opgenomen worden wel in de toekomstige applicatie voldaan.
 
 De criteria die geraakt zijn met dit proof-of-concept zijn als volgt:
 
