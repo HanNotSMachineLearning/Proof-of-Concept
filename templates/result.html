@@ -12,6 +12,22 @@
 			 font-size: 3rem;
 			 margin: auto;
 		 }
+
+		 .predictions {
+			 margin-top: 1rem;
+			 margin-bottom: 8rem;
+			 font-size: 1rem;
+			 font-weight: bold;
+			 line-height: 1.5;
+			 display: flex;
+			 align-items: center;
+			 text-align: center;
+			 color: #666;
+		 }
+
+		 .predictions > div {
+			 flex: 1 1 0;
+		 }
 	 </style>
 </head>
 
@@ -29,33 +45,23 @@
 				<h4>Verwacht wordt dat het hier gaat om de volgende diagnose:</h4>
 			</div>
 		</div>
-		<div class="row" style="text-align: center;">
-			<div class="col-sm-12 col-md-4" style="margin-top: 50px;">
-				<span style="color: #666666; font-size: 2rem; font-weight: bold;">{{ prediction[1]['disease'] }}</span>
-				<br/>
-				<span style="color: #666666; font-size: 1rem; font-weight: bold;">({{ prediction[1]['chance'] }}% kans)</span>
+		<div class="row predictions">
+			<div>
+				<div style="font-size: 2rem;">{{ prediction[1]['disease'] }}</div>
+				<div style="font-size: 1rem;">({{ prediction[1]['chance'] }}% kans)</div>
 			</div>
-			<div class="col-sm-12 col-md-4">
-				<span style="color: #666666; font-size: 4rem; font-weight: bold;">{{ prediction[0]['disease'] }}</span>
-				<br/>
-				<span style="color: #666666; font-size: 1rem; font-weight: bold;">({{ prediction[0]['chance'] }}% kans)</span>
+			<div>
+				<div style="font-size: 3rem;">{{ prediction[0]['disease'] }}</div>
+				<div style="font-size: 1rem;">({{ prediction[0]['chance'] }}% kans)</div>
 			</div>
-			<div class="col-sm-12 col-md-4" style="margin-top: 50px;">
-				<span style="color: #666666; font-size: 2rem; font-weight: bold;">{{ prediction[2]['disease'] }}</span>
-				<br/>
-				<span style="color: #666666; font-size: 1rem; font-weight: bold;">({{ prediction[2]['chance'] }}% kans)</span>
+			<div>
+				<div style="font-size: 2rem;">{{ prediction[2]['disease'] }}</div>
+				<div style="font-size: 1rem;">({{ prediction[2]['chance'] }}% kans)</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-12" style="text-align: center;">
-				<br/>
-				<br/>
-				<br/>
-				<br/>
-				<br/>
-				<br/>
-				<br/>
-				<h5>Deze voorspelling is gebasseerd op de volgende ingevoerde gegevens:</h5>
+				<h5>Deze voorspelling is gebaseerd op de volgende ingevoerde gegevens:</h5>
 				<br/>
 				<br/>
 			</div>
@@ -108,12 +114,13 @@
 				fetch("/diagnosis",
 				{
 					headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
 					},
 					method: "POST",
 					body: JSON.stringify({
-						"diagnosis": "{{ prediction[0]['disease'] }}",
+						"gender": {{ gender_bool }},
+						"disease": "{{ prediction[0]['disease'] }}",
 						"age": "{{ age }}",
 						"symptoms": {{ symptoms|tojson }}
 					})

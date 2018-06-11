@@ -34,7 +34,7 @@ class Diagnose(db.Model):
                            nullable=False)
 
     def __repr__(self):
-        return '<Diagnose %r>' % self.id
+        return '<Diagnose #%r: %r>' % (self.id, self.disease_id)
 
 
 class Symptom(db.Model):
@@ -83,16 +83,24 @@ def predict():
         abort(400)
     symptoms_input = request.form.getlist('symptoms') 
     result = predictor.predict(request.form['gender'], request.form['age'], symptoms_input)
-    gender = 'man' if request.form['gender'] == 1 else 'vrouw'
+    gender_bool = request.form['gender'] == "1"
+
+    gender = 'man' if gender_bool else 'vrouw'
 
     for r in result:
         r['chance'] = round(float(r['chance'])*100, 2)
 
-    return render_template('result.html',prediction=result,gender=gender,age=request.form['age'],symptoms=symptoms_input)
+    return render_template('result.html',prediction=result,gender=gender,gender_bool=int(gender_bool),age=request.form['age'],symptoms=symptoms_input)
 
 @app.route('/diagnosis', methods=['POST'])
 def addDiagnosis():
-    print()
+    data = request.get_json()
+    diagnose = Diagnose(gender=bool(data['gender']), age=data['age'], disease_id=Disease.query.filter_by(name=data['disease']).first().id)
+    for symptom in data['symptoms']:
+        diagnose.symptoms.append(Symptom.query.filter_by(name=symptom).first())
+
+    db.session.add(diagnose)
+    db.session.commit()
     return "done"
     
 
