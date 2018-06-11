@@ -6,7 +6,7 @@
 	<title>Home - Diagnostisator</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
 	 crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.2/awesomplete.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.min.css">
 	<style>
 		.diseases-list {
 			display: flex;
@@ -39,17 +39,16 @@
 		<section class="row">
 			<div class="col-sm-12 col-md-4">
 				<h3>Symptomen</h3>
-				<input class="awesomplete dropdown-input" list="mylist" name="symptoms" data-multiple>
-				<datalist id="mylist">
+				<select id="symptoms-input" list="mylist" name="symptoms" placeholder="Voer uw symptomen in" required>
 					{% for symptom in symptoms %}
 					<option>{{symptom}}</option>
 					{% endfor %}
-				</datalist>
+				</select>
 			</div>
 			<div class="col-sm-12 col-md-4">
 				<h3>Leeftijd</h3>
 				<div class="input-group mb-3">
-					<input type="number" class="form-control" id="age" name="age" min="0" max="150" required/>
+					<input type="number" class="form-control" id="age" name="age" placeholder="Voer uw leeftijd in" min="0" max="150" required/>
 					<div class="input-group-append">
 						<span class="input-group-text">jaar oud</span>
 					</div>
@@ -58,7 +57,7 @@
 			<div class="col-sm-12 col-md-4">
 				<div class="form-group">
 					<h3>Geslacht</h3>
-					<select class="form-control" id="gender" name="gender" required>
+					<select class="form-control" id="gender" name="gender" placeholder="Voer uw geslacht in" required>
 						<option value="1">Man</option>
 						<option value="0">Vrouw</option>
 					</select>
@@ -75,37 +74,14 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
 	 crossorigin="anonymous"></script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.2/awesomplete.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
 
 	<script>
-		new Awesomplete('awesomplete[data-multiple]', {
-			filter: function(text, input) {
-				return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
-			},
-
-			item: function(text, input) {
-				return Awesomplete.ITEM(text, input.match(/[^,]*$/)[0]);
-			},
-
-			replace: function(text) {
-				var before = this.input.value.match(/^.+,\s*|/)[0];
-				this.input.value = before + text + ", ";
-			}
-		});
-
-Awesomplete.$('.dropdown-btn').addEventListener("click", function() {
-	if (comboplete.ul.childNodes.length === 0) {
-		comboplete.minChars = 0;
-		comboplete.evaluate();
-	}
-	else if (comboplete.ul.hasAttribute('hidden')) {
-		comboplete.open();
-	}
-	else {
-		comboplete.close();
-	}
-});
-	
+		$("#symptoms-input").selectize({
+			plugins: ['remove_button'],
+			maxItems: null,
+			items: null
+		})
 		
 
 		fetch('https://127.0.0.1:5000/api/diseases').then(function (response) {
