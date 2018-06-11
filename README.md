@@ -9,25 +9,19 @@ De criteria die geraakt zijn met dit proof-of-concept zijn als volgt:
 - Het systeem geeft aan de hand van de ingevoerde symptomen resultaten terug, gesorteerd op relevantie.
 - Het systeem mag geen gegevens van patiënten bewaren.
 - Het systeem moet zelflerend zijn
-- Het systeem moet minimaal 95% van de tijd toegankelijk zijn.
 - Het systeem moet binnen vijftien seconden met een resultaat komen.
 - De applicatie moet een web- of desktopapplicatie worden.
-- Het systeem mag geen gegevens van patiënten bewaren.
+- Het systeem mag geen gegevens van patiënten bewaren, afgezien de leeftijd en het geslacht.
 
-De criteria waarin dit proof-of-concept **NIET** voldoet zijn als volgt:
-
-- De gebruiker moet in staat zijn symptomen tekstueel in te voeren in het systeem.
-- Het systeem accepteert alleen text-based input.
-- Het systeem geeft de gebruiker toegang tot de applicatie doordat deze correcte inloggegevens invoert. 
-- Het moet mogelijk zijn om nieuwe symptomen en ziekten in te voeren in de applicatie.
-- De gebruiker is in staat het systeem feedback te geven op het gegeven resultaat.
+De bovenstaande criteria zijn opgesteld aan de hand van de resultaten uit de enquete die onder huisartsen is verspreid tijdens het onderzoek.
 
 ## Installeren van de afhankelijkheden
 
 1. Installeer [Python 3.6.5](https://www.python.org/downloads/release/python-365/).
-2. Ga in een terminal-venster naar de map waar het proof-of-concept staat.
-3. Gebruik het commando `pip install -r requirements.txt --user` om de Python-modulen te installeren.
-4. Installeer [MySQL Community Server 8.0.11](https://dev.mysql.com/downloads/mysql/). Hiervoor wordt er mogelijk gevraagd om een account aan te maken om uw server te beveiligen.
+2. Installeer [pip 10.0.1](https://pip.pypa.io/en/stable/installing/).
+3. Ga in een terminal-venster naar de map waar het proof-of-concept staat.
+4. Gebruik het commando `pip install -r requirements.txt --user` om de Python-modulen te installeren.
+5. Installeer [MySQL Community Server 8.0.11](https://dev.mysql.com/downloads/mysql/). Hiervoor wordt er mogelijk gevraagd om een account aan te maken om uw server te beveiligen.
 
 ## Opstarten van het proof-of-concept
 
