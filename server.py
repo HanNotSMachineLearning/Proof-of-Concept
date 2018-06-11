@@ -6,7 +6,7 @@ from predictor import Predictor
 
 
 app = FlaskAPI(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://poc:Test123!@localhost/huisartsen'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:koekje@localhost/huisartsen'
 db = SQLAlchemy(app)
 
 # Database
@@ -66,7 +66,7 @@ predictor = Predictor(available_symptoms, diseases, features, labels)
 
 @app.route('/')
 def root():
-    return render_template('index.html')
+    return render_template('index.html', symptoms=availableSymptoms())
 
 
 @app.route('/api/symptoms')
@@ -74,15 +74,19 @@ def availableSymptoms():
     return predictor.available_symptoms
 
 @app.route('/api/diseases')
-def availableDuseases():
+def availableDiseases():
     return predictor.ziektes
 
 @app.route('/predict', methods=['POST'])
 def predict():
     if not request.form:
         abort(400)
-    result = predictor.predict(
-        request.form['gender'], request.form['age'], request.form.getlist('symptoms'))
+    
+    print(request.form["symptoms"])
+    print("split")
+    symptoms_input = list(filter(None, map(str.strip, request.form['symptoms'].split(","))))
+    print(request.form['symptoms'].split(","))
+    result = predictor.predict(request.form['gender'], request.form['age'], symptoms_input) 
     gender = 'man'
     if request.form['gender'] == 0:
         gender = 'vrouw'
@@ -90,7 +94,7 @@ def predict():
     for r in result:
         r['chance'] = round(float(r['chance'])*100, 2)
 
-    return render_template('result.html',prediction=result,gender=gender,age=request.form['age'],symptoms=request.form.getlist('symptoms'))
+    return render_template('result.html',prediction=result,gender=gender,age=request.form['age'],symptoms=symptoms_input)
 
 @app.route('/diagnosis', methods=['POST'])
 def addDiagnosis():
