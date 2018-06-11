@@ -16,10 +16,6 @@
 		.diseases-list>* {
 			padding: 10px;
 		}
-
-		.awesomplete {
-			width: 100%;
-		}
 	</style>
 </head>
 
@@ -82,9 +78,8 @@
 			maxItems: null,
 			items: null
 		})
-		
 
-		fetch('https://127.0.0.1:5000/api/diseases').then(function (response) {
+		fetch('/api/diseases').then(function (response) {
 			return response.json();
 		}).then(function (diseases) {
 			diseases.forEach(d => {
