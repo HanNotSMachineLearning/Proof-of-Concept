@@ -1,0 +1,16 @@
+ReadME:
+
+Functionaliteit: 
+* Het systeem mag geen gegevens van patiënten bewaren. 
+en  
+* Het systeem mag geen gegevens van patiënten bewaren, afgezien de leeftijd en het geslacht. 
+komt vrijwel op het zelfde neer. Gebruikt de tweede.
+
+Installeren van de afhankelijkheden:
+pip 10.0.1 veranderen naar Pip 10.0.1
+
+Opstarten van het proof-of-concept:
+- Zorg ervoor dat u een database gecreëerd heeft genaamd 'huisartsen'. vervangen naar "Creeër een database genaamd "huisartsen"
+
+rest:
+miss is het handig om een configuratie file te gebruiken voor de database credentials.
