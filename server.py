@@ -81,15 +81,9 @@ def availableDiseases():
 def predict():
     if not request.form:
         abort(400)
-    
-    print(request.form["symptoms"])
-    print("split")
-    symptoms_input = list(filter(None, map(str.strip, request.form['symptoms'].split(","))))
-    print(request.form['symptoms'].split(","))
-    result = predictor.predict(request.form['gender'], request.form['age'], symptoms_input) 
-    gender = 'man'
-    if request.form['gender'] == 0:
-        gender = 'vrouw'
+    symptoms_input = request.form.getlist('symptoms') 
+    result = predictor.predict(request.form['gender'], request.form['age'], symptoms_input)
+    gender = 'man' if request.form['gender'] == 1 else 'vrouw'
 
     for r in result:
         r['chance'] = round(float(r['chance'])*100, 2)
