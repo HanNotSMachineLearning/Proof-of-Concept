@@ -2,7 +2,7 @@
 
 ## Functionaliteit
 
-Dit proof-of-concept dient als prototype voor een toekomstige applicatie om huisartsen te assisteren bij het maken van correcte diagnoses voor zijn of haar patiënten en specialisten. Dit proof-of-concept voldoet nog niet alle criteria die beschreven zijn in het onderzoeksrapport in deelvraag 2, enkele hiervan zullen wel gerealiseerd worden in een toekomstige applicatie. Aan welke criteria wel en niet zijn voldaan staat hieronder beschreven.
+Dit proof-of-concept dient als prototype voor een toekomstige applicatie om huisartsen te assisteren bij het maken van correcte diagnoses voor zijn of haar patiënten en specialisten. Dit proof-of-concept voldoet nog niet alle criteria die beschreven zijn in het onderzoeksrapport in deelvraag 2, enkele hiervan zullen wel gerealiseerd worden in een toekomstige applicatie.
 
 De criteria die geraakt zijn met dit proof-of-concept zijn als volgt:
 
@@ -12,8 +12,10 @@ De criteria die geraakt zijn met dit proof-of-concept zijn als volgt:
 - Het systeem moet binnen vijftien seconden met een resultaat komen.
 - De applicatie moet een web- of desktopapplicatie worden.
 - Het systeem mag geen gegevens van patiënten bewaren, afgezien de leeftijd en het geslacht.
+- Het systeem accepteert alleen text-based input.
+- De gebruiker is in staat het systeem feedback te geven op het gegeven resultaat.
 
-De bovenstaande criteria zijn opgesteld aan de hand van de resultaten uit de enquete die onder huisartsen is verspreid tijdens het onderzoek.
+De bovenstaande criteria zijn opgesteld aan de hand van de resultaten uit de enquête die onder huisartsen is verspreid tijdens het onderzoek.
 
 ## Installeren van de afhankelijkheden
 
@@ -31,7 +33,7 @@ De bovenstaande criteria zijn opgesteld aan de hand van de resultaten uit de enq
 4. Zorg ervoor op regel 10 van het bestand '`server.py`' dat de goede database-gegevens ingevuld zijn.
 5. Ga in een terminal-venster naar de map waar het proof-of-concept staat.
 6. Start het proof-of-concept met het commando `python server.py`.
-7. Ga met uw browser naar https://localhost:5000.
+7. Ga met uw browser naar <https://localhost:5000>.
 
 De applicatie draait en het is nu mogelijk om voorspellingen uit te voeren.
 
