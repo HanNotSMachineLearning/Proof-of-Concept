@@ -61,7 +61,7 @@
 		</div>
 		<div id="feedback-section" class="row" style="text-align: center; margin-top: 150px">
 			<div class="col-sm-12">
-				<p>Voor de applicatie is het van belang dat hij meer cassussen tot zijn beschikking krijgt om zo een beter voorspelling
+				<p>Voor de applicatie is het van belang dat het meer cassussen tot zijn beschikking krijgt om zo een beter voorspelling
 					te kunnen doen.
 					<br/> Zou u kunnen aangeven of de gegeven nummer 1 voorspelling correct is of niet?
 				</p>
@@ -86,16 +86,15 @@
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	 crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
 	 crossorigin="anonymous"></script>
 
 	<script>
+		const feedbackSectionHtml = document.getElementById('feedback-section').innerHTML;
+
 		$(document).ready(function () {
-			$('#prediction-correct-btn').click(function () {
-				fetch("/diagnosis",
-				{
+			$(document).on('click', '#prediction-correct-btn', function () {
+				fetch("/diagnosis", {
 					headers: {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json'
@@ -107,16 +106,15 @@
 						"age": "{{ age }}",
 						"symptoms": {{ symptoms|tojson }}
 					})
-				})
+				});
 				Thanks();
 			});
-			$('#prediction-wrong-btn').click(function () {
-				Correct();
-			});
+		
+			$(document).on('click', '#prediction-wrong-btn', Correct);
 		});
 
 		function Correct(){
-			$('#feedback-section').html('<p class="col-sm-12">Zou u aan kunnen geven wat uw diagnose was, zo kunnen we dergelijke fouten in de toekomst voorkomen:</p><div class="col-sm-12"><select id="correct-diagnosis" class="form-control" name="correct-diagnosis" required>{% for disease in diseases %}<option value="{{disease}}">{{disease}}</option>{% endfor %}</select></div><div class="col-sm-12"><div class="btn-group" style="float: right; margin-top: 10px;"><button class="btn btn-primary" onclick="SendCorrect()">Versturen</button><button class="btn btn-secondary" onclick="Thanks()">Cancel</button></div></div>');
+			$('#feedback-section').html('<p class="col-sm-12">Zou u aan kunnen geven wat uw diagnose was, zo kunnen we dergelijke fouten in de toekomst voorkomen:</p><div class="col-sm-12"><select id="correct-diagnosis" class="form-control" name="correct-diagnosis" required>{% for disease in diseases %}<option value="{{disease}}">{{disease}}</option>{% endfor %}</select></div><div class="col-sm-12"><div class="btn-group" style="float: right; margin-top: 10px;"><button class="btn btn-primary" onclick="SendCorrect()">Versturen</button><button class="btn btn-secondary" onclick="ResetFeedbackSection()">Annuleren</button></div></div>');
 		}
 
 		function Thanks(){
@@ -128,22 +126,24 @@
 			$('#feedback-section').html('');
 		}
 
+		function ResetFeedbackSection() {
+			$('#feedback-section').html(feedbackSectionHtml)
+		}
+
 		function SendCorrect(){
-			console.log($("#correct-diagnosis").val());
-			fetch("/diagnosis",
-				{
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					method: "POST",
-					body: JSON.stringify({
-						"gender": {{ gender_bool }},
-						"disease": $("#correct-diagnosis").val(),
-						"age": "{{ age }}",
-						"symptoms": {{ symptoms|tojson }}
-					})
+			fetch("/diagnosis", {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				method: "POST",
+				body: JSON.stringify({
+					"gender": {{ gender_bool }},
+					"disease": $("#correct-diagnosis").val(),
+					"age": "{{ age }}",
+					"symptoms": {{ symptoms|tojson }}
 				})
+			});
 			Thanks();
 		}
 	</script>
