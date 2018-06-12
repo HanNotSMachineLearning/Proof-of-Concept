@@ -2,7 +2,7 @@ from flask import request, render_template, abort
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 
-from predictor import Predictor
+from Predictor import Predictor
 
 
 app = FlaskAPI(__name__)

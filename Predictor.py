@@ -48,5 +48,5 @@ class Predictor(object):
             symptoms_array.append(1 if available_symptom in symptoms else 0)
 
         predictions = self.clf.predict_proba([symptoms_array])[0]
-        return sorted([{'chance': x, 'disease': self.ziektes[i]} for i,x in enumerate(predictions)], key=lambda x: x['chance'], reverse=True)[:3]
+        return sorted([{'chance': x, 'disease': self.diseases[i]} for i,x in enumerate(predictions)], key=lambda x: x['chance'], reverse=True)[:3]
 
