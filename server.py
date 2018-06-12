@@ -6,7 +6,7 @@ from predictor import Predictor
 
 
 app = FlaskAPI(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:koekje@localhost/huisartsen'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/huisartsen'
 db = SQLAlchemy(app)
 
 # Database
@@ -66,7 +66,7 @@ predictor = Predictor(available_symptoms, diseases, features, labels)
 
 @app.route('/')
 def root():
-    return render_template('index.html', symptoms=availableSymptoms())
+    return render_template('index.html', symptoms=availableSymptoms(), diseases=availableDiseases())
 
 
 @app.route('/api/symptoms')

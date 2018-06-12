@@ -29,7 +29,12 @@
 		<h1>Stel een diagnose</h1>
 		<p>
 			De volgende ziektes kunnen voorspelt worden:
-			<div id="predictable-diseases" class="diseases-list"></div>
+			<div id="predictable-diseases" class="diseases-list">
+				{% for disease in diseases %}
+				<div><b>{{disease}}</b></div>
+				{% endfor %}
+
+			</div>
 		</p>
 		<br/>
 		<section class="row">
@@ -78,14 +83,6 @@
 			maxItems: null,
 			items: null
 		})
-
-		fetch('/api/diseases').then(function (response) {
-			return response.json();
-		}).then(function (diseases) {
-			diseases.forEach(d => {
-				$("#predictable-diseases").append('<div><b>'+d+'</b></div>')
-			});
-		});
 	</script>
 </body>
 
