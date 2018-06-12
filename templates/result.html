@@ -114,7 +114,7 @@
 		});
 
 		function Correct(){
-			$('#feedback-section').html('<p class="col-sm-12">Zou u aan kunnen geven wat uw diagnose was, zo kunnen we dergelijke fouten in de toekomst voorkomen:</p><div class="col-sm-12"><select id="correct-diagnosis" class="form-control" name="correct-diagnosis" required>{% for disease in diseases %}<option value="{{disease}}">{{disease}}</option>{% endfor %}</select></div><div class="col-sm-12"><div class="btn-group" style="float: right; margin-top: 10px;"><button class="btn btn-primary" onclick="SendCorrect()">Versturen</button><button class="btn btn-secondary" onclick="ResetFeedbackSection()">Annuleren</button></div></div>');
+			$('#feedback-section').html('<p class="col-sm-12">Zou u aan kunnen geven wat uw diagnose was, zo kunnen we dergelijke fouten in de toekomst voorkomen:</p><div class="col-sm-12"><select id="correct-diagnosis" class="form-control" name="correct-diagnosis" required>{% for disease in diseases %}<option value="{{disease}}">{{disease}}</option>{% endfor %}</select></div><div class="col-sm-12"><div class="btn-group" style="float: right; margin-top: 10px;"><button class="btn btn-primary" onclick="SendCorrect()">Versturen</button><button class="btn btn-secondary" onclick="NoProblem()">Annuleren</button></div></div>');
 		}
 
 		function Thanks(){
@@ -126,8 +126,9 @@
 			$('#feedback-section').html('');
 		}
 
-		function ResetFeedbackSection() {
-			$('#feedback-section').html(feedbackSectionHtml)
+		function NoProblem() {
+			$('#feedback-section').html('<span class="thanks">Oke, geen probleem!</span>');
+			setTimeout(RemoveThanks, 5000);
 		}
 
 		function SendCorrect(){
