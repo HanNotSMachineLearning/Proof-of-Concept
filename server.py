@@ -6,7 +6,7 @@ from predictor import Predictor
 
 
 app = FlaskAPI(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/huisartsen'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://poc:Dev123@localhost/huisartsen'
 db = SQLAlchemy(app)
 
 # Database
@@ -66,16 +66,7 @@ predictor = Predictor(available_symptoms, diseases, features, labels)
 
 @app.route('/')
 def root():
-    return render_template('index.html', symptoms=availableSymptoms(), diseases=availableDiseases())
-
-
-@app.route('/api/symptoms')
-def availableSymptoms():
-    return predictor.available_symptoms
-
-@app.route('/api/diseases')
-def availableDiseases():
-    return predictor.ziektes
+    return render_template('index.html', symptoms=predictor.available_symptoms, diseases=predictor.diseases)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -90,7 +81,7 @@ def predict():
     for r in result:
         r['chance'] = round(float(r['chance'])*100, 2)
 
-    return render_template('result.html',prediction=result,gender=gender,gender_bool=int(gender_bool),age=request.form['age'],symptoms=symptoms_input)
+    return render_template('result.html',prediction=result,gender=gender,gender_bool=int(gender_bool),age=request.form['age'],symptoms=symptoms_input,diseases=predictor.diseases)
 
 @app.route('/diagnosis', methods=['POST'])
 def addDiagnosis():
@@ -105,5 +96,4 @@ def addDiagnosis():
     
 
 if __name__ == "__main__":
-    context = ('ssl/machine.crt', 'ssl/machine.key')
-    app.run(debug=True, ssl_context=context)
+    app.run(debug=True)
