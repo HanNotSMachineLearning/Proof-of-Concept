@@ -1,0 +1,39 @@
+
+
+footer {
+    position: fixed;
+    bottom: 1rem;
+}
+
+/* Index page */
+.diseases-list {
+    display: flex;
+    justify-content: space-around;
+}
+
+.diseases-list>* {
+    padding: 10px;
+}
+
+/* Results page */
+.thanks{
+    text-align: center;
+    font-size: 3rem;
+    margin: auto;
+}
+
+.predictions {
+    margin-top: 1rem;
+    margin-bottom: 8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #666;
+}
+
+.predictions > div {
+    flex: 1 1 0;
+}
