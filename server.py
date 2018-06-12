@@ -2,16 +2,14 @@ from flask import request, render_template, abort
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 
-from Predictor import Predictor
+from predictor import Predictor
 
 
 app = FlaskAPI(__name__)
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql://root:koekje@localhost/huisartsen'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/huisartsen'
 db = SQLAlchemy(app)
 
 # Database
-
 diagnose_symptoms = db.Table('diagnose_symptoms', db.Column('diagnose_id', db.Integer, db.ForeignKey(
     'diagnose.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False), db.Column('symptom_id', db.Integer, db.ForeignKey('symptom.id',  ondelete='CASCADE', onupdate='CASCADE'), nullable=False))
 
@@ -36,7 +34,7 @@ class Diagnose(db.Model):
                            nullable=False)
 
     def __repr__(self):
-        return '<Diagnose %r>' % self.id
+        return '<Diagnose #%r: %r>' % (self.id, self.disease_id)
 
 
 class Symptom(db.Model):
@@ -68,22 +66,43 @@ predictor = Predictor(available_symptoms, diseases, features, labels)
 
 @app.route('/')
 def root():
-    return render_template('index.html', available_symptoms=predictor.available_symptoms)
+    return render_template('index.html', symptoms=availableSymptoms(), diseases=availableDiseases())
 
 
-@app.route('/api/symptoms/all')
-def available_symptoms_route():
+@app.route('/api/symptoms')
+def availableSymptoms():
     return predictor.available_symptoms
 
+@app.route('/api/diseases')
+def availableDiseases():
+    return predictor.ziektes
 
 @app.route('/predict', methods=['POST'])
-def foo():
+def predict():
     if not request.form:
         abort(400)
+    symptoms_input = request.form.getlist('symptoms') 
+    result = predictor.predict(request.form['gender'], request.form['age'], symptoms_input)
+    gender_bool = request.form['gender'] == "1"
 
-    result = predictor.predict(
-        request.form['gender'], request.form['age'], request.form.getlist('symptoms'))
-    return result
+    gender = 'man' if gender_bool else 'vrouw'
+
+    for r in result:
+        r['chance'] = round(float(r['chance'])*100, 2)
+
+    return render_template('result.html',prediction=result,gender=gender,gender_bool=int(gender_bool),age=request.form['age'],symptoms=symptoms_input)
+
+@app.route('/diagnosis', methods=['POST'])
+def addDiagnosis():
+    data = request.get_json()
+    diagnose = Diagnose(gender=bool(data['gender']), age=data['age'], disease_id=Disease.query.filter_by(name=data['disease']).first().id)
+    for symptom in data['symptoms']:
+        diagnose.symptoms.append(Symptom.query.filter_by(name=symptom).first())
+
+    db.session.add(diagnose)
+    db.session.commit()
+    return "done"
+    
 
 if __name__ == "__main__":
     context = ('ssl/machine.crt', 'ssl/machine.key')
